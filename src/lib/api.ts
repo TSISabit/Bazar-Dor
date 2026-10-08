@@ -19,62 +19,97 @@ export interface Product {
   minPrice?: number;
   maxPrice?: number;
   bazarPrices?: BazarPrice[];
+  [key: string]: unknown;
 }
 
-interface ApiResponse<T> {
-  data?: T;
-  products?: T;
-  result?: T;
+function normalizeProduct(item: Record<string, unknown>): Product {
+  const name =
+    (item.name as string) ||
+    (item.product_name as string) ||
+    (item.title as string) ||
+    "পণ্য";
+
+  const rawPrice =
+    item.price ??
+    item.todayPrice ??
+    item.todays_price ??
+    item.current_price ??
+    item.market_price ??
+    0;
+
+  const rawChange =
+    item.change ??
+    item.change_percent ??
+    item.change_percentage ??
+    item.price_change ??
+    item.percentage ??
+    0;
+
+  return {
+    id: (item.id as string | number) || (item._id as string | number) || Math.random(),
+    name,
+    price: typeof rawPrice === "number" ? rawPrice : parseFloat(String(rawPrice)) || 0,
+    change: typeof rawChange === "number" ? rawChange : parseFloat(String(rawChange)) || 0,
+    unit: (item.unit as string) || (item.unit_name as string) || "প্রতি কেজি",
+    emoji: (item.emoji as string) || (item.icon as string) || "🥬",
+    category: (item.category as string) || "",
+    description: (item.description as string) || "",
+    minPrice: typeof item.minPrice === "number" ? item.minPrice : undefined,
+    maxPrice: typeof item.maxPrice === "number" ? item.maxPrice : undefined,
+    bazarPrices: Array.isArray(item.bazarPrices) ? (item.bazarPrices as BazarPrice[]) : undefined,
+  };
 }
 
-function extractArray(json: unknown): Product[] {
-  if (Array.isArray(json)) {
-    return json as Product[];
+function parseResponseData(raw: unknown): Product[] {
+  if (!raw) return [];
+
+  let list: unknown[] = [];
+  if (Array.isArray(raw)) {
+    list = raw;
+  } else if (typeof raw === "object" && raw !== null) {
+    const record = raw as Record<string, unknown>;
+    if (Array.isArray(record.data)) list = record.data;
+    else if (Array.isArray(record.products)) list = record.products;
+    else if (Array.isArray(record.result)) list = record.result;
+    else if (Array.isArray(record.items)) list = record.items;
   }
-  if (json && typeof json === "object") {
-    const obj = json as ApiResponse<Product[]>;
-    if (Array.isArray(obj.data)) return obj.data;
-    if (Array.isArray(obj.products)) return obj.products;
-    if (Array.isArray(obj.result)) return obj.result;
-  }
-  return [];
+
+  return list.map((item) => normalizeProduct(item as Record<string, unknown>));
 }
 
-async function fetcher<T>(endpoint: string): Promise<T> {
+async function requestApi(endpoint: string): Promise<unknown> {
   try {
     const res = await fetch(`${BASE_1}${endpoint}`, { cache: "no-store" });
     if (!res.ok) throw new Error("Base 1 failed");
-    return (await res.json()) as T;
+    return await res.json();
   } catch {
     const res = await fetch(`${BASE_2}${endpoint}`, { cache: "no-store" });
     if (!res.ok) throw new Error("Base 2 failed");
-    return (await res.json()) as T;
+    return await res.json();
   }
 }
 
 export const getProducts = async (): Promise<Product[]> => {
-  const json = await fetcher<unknown>("/products");
-  return extractArray(json);
+  const json = await requestApi("/products");
+  return parseResponseData(json);
 };
 
 export const getProductById = async (id: string): Promise<Product> => {
-  const json = await fetcher<Product | ApiResponse<Product>>(`/products/${id}`);
-  if (json && typeof json === "object" && "data" in json && json.data) {
-    return json.data;
+  const json = (await requestApi(`/products/${id}`)) as Record<string, unknown>;
+  if (json && typeof json === "object" && json.data) {
+    return normalizeProduct(json.data as Record<string, unknown>);
   }
-  return json as Product;
+  return normalizeProduct(json);
 };
 
 export const getCategories = async (): Promise<string[]> => {
-  const json = await fetcher<string[] | ApiResponse<string[]>>("/categories");
-  if (Array.isArray(json)) return json;
-  if (json && typeof json === "object" && "data" in json && Array.isArray(json.data)) {
-    return json.data;
-  }
+  const json = (await requestApi("/categories")) as Record<string, unknown>;
+  if (Array.isArray(json)) return json as string[];
+  if (json && Array.isArray(json.data)) return json.data as string[];
   return [];
 };
 
 export const getProductsByCategory = async (cat: string): Promise<Product[]> => {
-  const json = await fetcher<unknown>(`/products?category=${cat}`);
-  return extractArray(json);
+  const json = await requestApi(`/products?category=${cat}`);
+  return parseResponseData(json);
 };
