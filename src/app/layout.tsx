@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang="bn" data-theme="light" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen flex flex-col bg-slate-50/50`} suppressHydrationWarning>
         <Toaster position="top-right" />
-        <Navbar />
+        <Suspense fallback={<div className="h-16 bg-white border-b" />}>
+          <Navbar />
+        </Suspense>
         <div className="flex-1">{children}</div>
         <Footer />
       </body>
