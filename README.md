@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 Bazar Dor (বাজার দর) - Daily Commodity Market Price Tracker
 
-## Getting Started
+A modern web application built to monitor, analyze, and compare real-time daily commodity and kitchen market prices across major local bazaars.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Real-Time Price Ticker:** Animated infinite marquee displaying trending items, current prices, and percentage changes.
+- **Market Monitoring Dashboard:**
+  - **Today's Risers (আজ দাম বেড়েছে):** Highlights the top commodities experiencing the highest price surges.
+  - **Today's Fallers (আজ দাম কমেছে):** Displays commodities with notable price drops.
+  - **All Products:** Comprehensive inventory listing with interactive sorting (Default, Price: Low to High, Price: High to Low).
+- **Category Browsing:** Categorized listings for essentials including Rice (চাল), Lentils (ডাল), Oil (তেল), Vegetables (সবজি), Fish (মাছ), and Meat (মাংস) with loading skeletons.
+- **Protected Product Details:** In-depth product view featuring pricing across different physical bazaars (e.g., Karwan Bazar, Mirpur-1, Mohammadpur Town Hall). Accessible only to authenticated users (unauthenticated users are automatically redirected to Sign-In).
+- **Authentication:** Integrated email/password and OAuth authentication using BetterAuth.
+- **Hydration Safe:** Standardized date formatting with synchronized external stores to eliminate SSR/CSR hydration mismatches.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework:** Next.js (App Router, Turbopack)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS & DaisyUI
+- **Authentication:** BetterAuth
+- **Icons:** Lucide React
+- **Notifications:** React Hot Toast
