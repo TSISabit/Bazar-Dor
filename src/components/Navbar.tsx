@@ -3,9 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getBanglaDate } from "@/lib/utils";
 import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import DateDisplay from "./DateDisplay";
 
 const categories = [
   { name: "সব পণ্য", slug: "/" },
@@ -27,16 +27,15 @@ export default function Navbar() {
   };
 
   return (
-    <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
-      {/* Top Navbar Row */}
+    <header className="border-b bg-white sticky top-0 z-50 shadow-sm" suppressHydrationWarning>
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Left: Logo + Bengali Date */}
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 relative flex-shrink-0">
             <Image
               src="/logo-icon.png"
               alt="বাজার দর"
               fill
+              sizes="40px"
               className="object-contain"
               priority
             />
@@ -45,11 +44,10 @@ export default function Navbar() {
             <div className="text-xl font-bold text-emerald-800 tracking-tight flex items-center gap-1">
               বাজার দর
             </div>
-            <p className="text-[11px] text-gray-500">{getBanglaDate()}</p>
+            <DateDisplay />
           </div>
         </Link>
 
-        {/* Right: Auth Buttons */}
         <div className="flex items-center gap-3">
           {session ? (
             <div className="flex items-center gap-2">
@@ -85,7 +83,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Middle/Second Row: Category Navigation Links */}
       <nav className="border-t bg-gray-50/80 overflow-x-auto scrollbar-none">
         <div className="max-w-6xl mx-auto px-4 flex gap-6 text-sm py-2">
           {categories.map((cat) => {

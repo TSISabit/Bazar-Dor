@@ -3,19 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { getProductsByCategory } from "@/lib/api";
+import { getProductsByCategory, Product } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { ArrowUpDown } from "lucide-react";
-
-interface Product {
-  id: string | number;
-  name: string;
-  price: number;
-  unit?: string;
-  change?: number;
-  emoji?: string;
-  category?: string;
-}
 
 export default function CategoryPage() {
   const params = useParams();
@@ -42,7 +32,7 @@ export default function CategoryPage() {
     loadData();
   }, [slug]);
 
-  // Sort numerically, not as a string
+  // C1 Challenge: বাংলা ও ইংরেজি যেকোনো দামকে নিউমেরিক্যালি সর্ট করা
   const sortedProducts = [...products].sort((a, b) => {
     const priceA = Number(a.price) || 0;
     const priceB = Number(b.price) || 0;
@@ -63,7 +53,7 @@ export default function CategoryPage() {
           </h1>
         </div>
 
-        {/*Sort dropdown */}
+        {/* C1: Sort dropdown */}
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <ArrowUpDown className="w-4 h-4 text-gray-500" />
           <label htmlFor="sortSelect" className="text-xs text-gray-600 font-medium">

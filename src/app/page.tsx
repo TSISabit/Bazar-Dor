@@ -1,17 +1,7 @@
 import Image from "next/image";
-import { getProducts } from "@/lib/api";
+import { getProducts, Product } from "@/lib/api";
 import PriceTicker from "@/components/PriceTicker";
 import ProductCard from "@/components/ProductCard";
-
-interface Product {
-  id: string | number;
-  name: string;
-  price: number;
-  unit?: string;
-  change?: number;
-  emoji?: string;
-  category?: string;
-}
 
 export default async function HomePage() {
   let products: Product[] = [];
@@ -23,18 +13,18 @@ export default async function HomePage() {
     console.error("Failed to load products:", error);
   }
 
-  // Risers (Section A) 
+  // Risers (Section A) - Top 6 highest percentage increase
   const risers = [...products]
-    .sort((a, b) => (b.change ?? 0) - (a.change ?? 0))
+    .sort((a, b) => (Number(b.change) || 0) - (Number(a.change) || 0))
     .slice(0, 6);
 
-  // Fallers (Section B) 
+  // Fallers (Section B) - Top 6 highest percentage decrease
   const fallers = [...products]
-    .sort((a, b) => (a.change ?? 0) - (b.change ?? 0))
+    .sort((a, b) => (Number(a.change) || 0) - (Number(b.change) || 0))
     .slice(0, 6);
 
   return (
-    <main className="pb-16">
+    <main className="pb-16" suppressHydrationWarning>
       {/* Price Ticker Strip */}
       <PriceTicker products={products} />
 
@@ -66,6 +56,7 @@ export default async function HomePage() {
                 src="/bazar-hero.png"
                 alt="বাজার দর হিরো ব্যানার"
                 fill
+                sizes="(max-width: 768px) 288px, 320px"
                 className="object-cover"
                 priority
               />

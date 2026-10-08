@@ -7,10 +7,15 @@ export const toBengaliNumber = (num: number | string | undefined | null): string
 };
 
 export const getBanglaDate = (): string => {
-  return new Intl.DateTimeFormat('bn-BD', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date());
+  // স্ট্যাটিক সেফ ডেট যা সার্ভার ও ক্লায়েন্টে ১০০% ম্যাচ করবে
+  const today = new Date();
+  const day = today.getDate();
+  const months = [
+    "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
+    "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
+  ];
+  const days = [
+    "রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"
+  ];
+  return `${days[today.getDay()]}, ${toBengaliNumber(day)} ${months[today.getMonth()]}, ${toBengaliNumber(today.getFullYear())}`;
 };
