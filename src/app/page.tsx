@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getProducts, Product } from "@/lib/api";
 import PriceTicker from "@/components/PriceTicker";
 import ProductCard from "@/components/ProductCard";
+import AllProductsSection from "@/components/AllProductsSection";
 
 export default async function HomePage() {
   let products: Product[] = [];
@@ -93,20 +94,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Section C: সব পণ্য */}
-        <section id="সব-পণ্য" className="pt-4 scroll-mt-24">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">সব পণ্য</h2>
-            <p className="text-xs text-gray-500 mt-1">
-              বাজারে উপলব্ধ সকল পণ্যের হালনাগাদ তালিকা
-            </p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.map((p) => (
-              <ProductCard key={`all-${p.id}`} product={p} />
-            ))}
-          </div>
-        </section>
+        {/* Section C: সব পণ্য (সাজান ড্রপডাউন সহ) */}
+        <AllProductsSection initialProducts={products} />
       </div>
     </main>
   );
