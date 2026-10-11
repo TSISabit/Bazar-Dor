@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import PriceTicker from "@/components/PriceTicker";
 import Footer from "@/components/Footer";
 import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
@@ -22,9 +23,15 @@ export default function RootLayout({
     <html lang="bn" data-theme="light" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen flex flex-col bg-slate-50/50`} suppressHydrationWarning>
         <Toaster position="top-right" />
+        
         <Suspense fallback={<div className="h-16 bg-white border-b" />}>
           <Navbar />
         </Suspense>
+
+        <Suspense fallback={<div className="h-10 bg-white border-b" />}>
+          <PriceTicker />
+        </Suspense>
+
         <div className="flex-1">{children}</div>
         <Footer />
       </body>

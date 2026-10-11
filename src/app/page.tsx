@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { getProducts, Product } from "@/lib/api";
-import PriceTicker from "@/components/PriceTicker";
 import ProductCard from "@/components/ProductCard";
 import AllProductsSection from "@/components/AllProductsSection";
 
@@ -27,7 +26,6 @@ export default async function HomePage() {
   return (
     <main className="pb-16" suppressHydrationWarning>
       {/* Price Ticker Strip */}
-      <PriceTicker products={products} />
 
       {/* Hero / Banner Section */}
       <section className="bg-gradient-to-b from-emerald-50/70 to-white py-12 md:py-16 border-b border-gray-100">

@@ -10,12 +10,16 @@
     transform: translateX(0%);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 }
 
 .animate-marquee {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 30s linear infinite;
+  display: flex;
+  min-width: 100%;
+  animation: marquee 25s linear infinite;
+}
+
+.ticker-wrapper:hover .animate-marquee {
+  animation-play-state: paused;
 }
