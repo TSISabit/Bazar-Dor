@@ -21,14 +21,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bn" data-theme="light" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen flex flex-col bg-slate-50/50`} suppressHydrationWarning>
+      <body
+        className={`${inter.className} min-h-screen flex flex-col bg-[#f4f7f5] text-gray-800 antialiased`}
+        suppressHydrationWarning
+      >
         <Toaster position="top-right" />
         
-        <Suspense fallback={<div className="h-16 bg-white border-b" />}>
+        {/* Global Fixed Navbar & Category Bar */}
+        <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
           <Navbar />
         </Suspense>
 
-        <Suspense fallback={<div className="h-10 bg-white border-b" />}>
+        {/* Global Fixed Price Ticker */}
+        <Suspense fallback={<div className="h-10 bg-white border-b border-gray-200" />}>
           <PriceTicker />
         </Suspense>
 

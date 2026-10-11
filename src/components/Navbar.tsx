@@ -30,8 +30,8 @@ export default function Navbar() {
       {/* Top Main Navbar */}
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-xs">
-            <ShoppingCart className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-xs">
+            <img src="./logo-icon.png" alt="Logo" />
           </div>
           <div>
             <span className="text-xl font-extrabold text-gray-900 tracking-tight">
