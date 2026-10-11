@@ -6,6 +6,17 @@ import { getProductsByCategory, Product } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { ArrowUpDown } from "lucide-react";
 
+const categoryMeta: Record<string, { name: string; emoji: string }> = {
+  chal: { name: "চাল", emoji: "🍚" },
+  dal: { name: "ডাল", emoji: "🫘" },
+  tel: { name: "তেল", emoji: "🛢️" },
+  sobji: { name: "সবজি", emoji: "🥬" },
+  mach: { name: "মাছ", emoji: "🐟" },
+  mangsho: { name: "মাংস", emoji: "🍗" },
+  "dim-dudh": { name: "ডিম-দুধ", emoji: "🥛" },
+  moshla: { name: "মসলা", emoji: "🌶️" },
+};
+
 export default function CategoryContent({
   params,
 }: {
@@ -44,26 +55,32 @@ export default function CategoryContent({
     return 0;
   });
 
+  const categoryInfo = categoryMeta[slug] || {
+    name: decodeURIComponent(slug),
+    emoji: "🏷️",
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 min-h-[70vh]">
+      {/* Category Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-gray-200">
         <div>
           <span className="text-xs text-gray-500 font-medium">ক্যাটাগরি</span>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 capitalize flex items-center gap-2">
-            🏷️ {slug}
+          <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 flex items-center gap-2">
+            <span>{categoryInfo.emoji}</span> {categoryInfo.name}
           </h1>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
           <ArrowUpDown className="w-4 h-4 text-gray-500" />
-          <label htmlFor="sortSelect" className="text-xs text-gray-600 font-medium">
+          <label htmlFor="sortSelect" className="text-xs sm:text-sm text-gray-600 font-medium">
             সাজান:
           </label>
           <select
             id="sortSelect"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as "default" | "asc" | "desc")}
-            className="select select-bordered select-sm text-xs rounded-lg border-gray-300 focus:border-emerald-600 focus:outline-none bg-white"
+            className="select select-bordered select-sm text-xs sm:text-sm rounded-lg border-gray-300 focus:border-emerald-600 focus:outline-none bg-white font-medium"
           >
             <option value="default">ডিফল্ট</option>
             <option value="asc">দাম: কম থেকে বেশি ▴</option>
@@ -72,19 +89,20 @@ export default function CategoryContent({
         </div>
       </div>
 
+      {/* Loading Skeleton: Mobile: 1, Tab: 2, PC: 3 */}
       {loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[...Array(8)].map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className="h-52 bg-gray-100 animate-pulse rounded-2xl p-4 flex flex-col justify-between"
+              className="h-56 bg-white border border-gray-100 rounded-2xl p-5 shadow-xs animate-pulse flex flex-col justify-between"
             >
               <div>
-                <div className="w-16 h-16 bg-gray-200 rounded-xl mb-3" />
+                <div className="w-14 h-14 bg-gray-200 rounded-xl mb-4" />
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-1/2" />
+                <div className="h-3 bg-gray-200 rounded w-1/3" />
               </div>
-              <div className="pt-3 border-t border-gray-200 flex justify-between items-center">
+              <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
                 <div className="h-5 bg-gray-200 rounded w-1/3" />
                 <div className="h-5 bg-gray-200 rounded w-1/4" />
               </div>
@@ -93,8 +111,9 @@ export default function CategoryContent({
         </div>
       )}
 
+      {/* Empty State */}
       {!loading && sortedProducts.length === 0 && (
-        <div className="text-center py-20 bg-white border border-gray-100 rounded-2xl shadow-sm">
+        <div className="text-center py-20 bg-white border border-gray-100 rounded-2xl shadow-xs">
           <div className="text-5xl mb-3">🔍</div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">
             এই ক্যাটাগরিতে কোনো পণ্য পাওয়া যায়নি
@@ -104,15 +123,16 @@ export default function CategoryContent({
           </p>
           <Link
             href="/"
-            className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-all"
+            className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-xs"
           >
             হোম পেজে ফিরে যান
           </Link>
         </div>
       )}
 
+      {/* Final Products: Mobile: 1, Tab: 2, PC: 3 */}
       {!loading && sortedProducts.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {sortedProducts.map((p) => (
             <ProductCard key={`cat-${p.id}`} product={p} />
           ))}

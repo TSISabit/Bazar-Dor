@@ -13,38 +13,34 @@ export default async function HomePage() {
     console.error("Failed to load products:", error);
   }
 
-  // Risers (Section A) - Top 6 highest percentage increase
+  // Risers (Section A) - Top 6
   const risers = [...products]
     .sort((a, b) => (Number(b.change) || 0) - (Number(a.change) || 0))
     .slice(0, 6);
 
-  // Fallers (Section B) - Top 6 highest percentage decrease
+  // Fallers (Section B) - Top 6
   const fallers = [...products]
     .sort((a, b) => (Number(a.change) || 0) - (Number(b.change) || 0))
     .slice(0, 6);
 
   return (
     <main className="pb-16" suppressHydrationWarning>
-      {/* Hero / Banner Section - Exactly like Image 2 */}
+      {/* Hero / Banner Section */}
       <section className="max-w-6xl mx-auto px-4 pt-8">
         <div className="bg-white border border-gray-100 rounded-3xl shadow-xs p-6 sm:p-10 md:p-12 flex flex-col-reverse md:flex-row items-center justify-between gap-8">
           <div className="max-w-xl text-left">
-            {/* Date Badge */}
             <span className="inline-block bg-emerald-50 text-emerald-800 text-xs px-3.5 py-1 rounded-full font-medium mb-4">
               রবিবার, ১১ অক্টোবর, ২০২৬
             </span>
 
-            {/* Main Headline */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 leading-snug mb-3">
               আজকের বাজারের দাম এক নজরে
             </h1>
 
-            {/* Subtext */}
             <p className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed mb-6 font-normal">
               চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
             </p>
 
-            {/* Action Button */}
             <a
               href="#সব-পণ্য"
               className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-xs"
@@ -53,7 +49,6 @@ export default async function HomePage() {
             </a>
           </div>
 
-          {/* Basket Vector Image */}
           <div className="w-48 h-48 sm:w-60 sm:h-60 relative shrink-0">
             <Image
               src="/bazar-hero.png"
@@ -74,7 +69,8 @@ export default async function HomePage() {
             <h2 className="text-xl md:text-2xl font-bold text-gray-800">আজ দাম বেড়েছে</h2>
             <span className="text-rose-600 font-bold text-lg">▲</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {risers.map((p) => (
               <ProductCard key={`riser-${p.id}`} product={p} />
             ))}
@@ -87,7 +83,8 @@ export default async function HomePage() {
             <h2 className="text-xl md:text-2xl font-bold text-gray-800">আজ দাম কমেছে</h2>
             <span className="text-emerald-600 font-bold text-lg">▼</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {/* Mobile: 1, Tab: 2, PC: 3 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {fallers.map((p) => (
               <ProductCard key={`faller-${p.id}`} product={p} />
             ))}
