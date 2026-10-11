@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductById, Product } from "@/lib/api";
@@ -31,13 +32,7 @@ const dummyMarkets: MarketItem[] = [
   { market: "কারওয়ান বাজার", division: "ঢাকা", min: 146, max: 165, avg: 155.5 },
 ];
 
-export default async function ProductDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-
+async function ProductDetailsContent({ id }: { id: string }) {
   let rawProduct: Product | null = null;
   try {
     rawProduct = await getProductById(id);
@@ -76,7 +71,7 @@ export default async function ProductDetailsPage({
   const categoryPath = product.categorySlug || product.category || "chal";
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="space-y-6">
       {/* Breadcrumb */}
       <nav className="text-xs text-gray-500 flex items-center gap-2">
         <Link href="/" className="hover:text-emerald-700">
@@ -232,6 +227,30 @@ export default async function ProductDetailsPage({
           <span>{product.emoji || "🏷️"}</span> সব {product.category || "পণ্য"}
         </Link>
       </div>
+    </div>
+  );
+}
+
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <Suspense
+        fallback={
+          <div className="space-y-6 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+            <div className="h-32 bg-white rounded-3xl border border-gray-100" />
+            <div className="h-64 bg-white rounded-3xl border border-gray-100" />
+          </div>
+        }
+      >
+        <ProductDetailsContent id={id} />
+      </Suspense>
     </div>
   );
 }
