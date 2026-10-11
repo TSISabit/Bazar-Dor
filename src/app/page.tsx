@@ -38,11 +38,11 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed mb-6 font-normal">
-              চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
+              চাল, ডাল, তেল, সবজি, মাছ, মাংস এর — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
             </p>
 
             <a
-              href="#সব-পণ্য"
+              href="#সব-পণ্য" 
               className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-xs"
             >
               সব পণ্য দেখুন
