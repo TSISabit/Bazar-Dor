@@ -12,8 +12,6 @@ const categories = [
   { name: "সবজি", slug: "sobji", emoji: "🥬" },
   { name: "মাছ", slug: "mach", emoji: "🐟" },
   { name: "মাংস", slug: "mangsho", emoji: "🍗" },
-  { name: "ডিম-দুধ", slug: "dim-dudh", emoji: "🥛" },
-  { name: "মসলা", slug: "moshla", emoji: "🌶️" },
 ];
 
 export default function Navbar() {
