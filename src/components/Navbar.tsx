@@ -1,108 +1,131 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 const categories = [
   { name: "চাল", slug: "chal", emoji: "🍚" },
   { name: "ডাল", slug: "dal", emoji: "🫘" },
-  { name: "তেল", slug: "tel", emoji: "🛢️" },
-  { name: "সবজি", slug: "sobji", emoji: "🥬" },
-  { name: "মাছ", slug: "mach", emoji: "🐟" },
-  { name: "মাংস", slug: "mangsho", emoji: "🍗" },
+  { name: "তেল", slug: "oil", emoji: "🛢️" },
+  { name: "সবজি", slug: "vegetables", emoji: "🥬" },
+  { name: "মাছ", slug: "fish", emoji: "🐟" },
+  { name: "মাংস", slug: "meat", emoji: "🍗" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = useSession();
+
+  const date = new Intl.DateTimeFormat("bn-BD", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date());
 
   const handleLogout = async () => {
     try {
       await signOut();
       toast.success("সফলভাবে সাইন আউট হয়েছে!");
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 700);
+      router.push("/");
+      router.refresh();
     } catch {
       toast.error("সাইন আউট করতে সমস্যা হয়েছে");
     }
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-      {/* Top Main Navbar */}
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
+      {/* Main Navbar */}
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-xs overflow-hidden">
-            <img src="/logo-icon.png" alt="Logo" className="w-6 h-6 object-contain" />
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-emerald-500 text-white shadow-sm">
+            <img
+              src="/logo-icon.png"
+              alt="বাজার দর"
+              className="h-6 w-6 object-contain"
+            />
           </div>
+
           <div>
-            <span className="text-xl font-extrabold text-gray-900 tracking-tight">
+            <span className="text-xl font-extrabold tracking-tight text-gray-900">
               বাজার দর
             </span>
-            <span className="block text-[11px] text-gray-500 font-medium -mt-0.5">
-              রবিবার, ১১ অক্টোবর, ২০২৬
+            <span className="mt-0.5 block text-[11px] font-medium text-gray-500">
+              {date}
             </span>
           </div>
         </Link>
 
-        {/* Auth Buttons */}
-        <div className="flex items-center gap-3">
-          {session ? (
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1.5 rounded-lg">
-                {session.user?.name || "ইউজার"}
-              </span>
+        {/* Authentication */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {session?.user ? (
+            <>
+              <Link
+                href="/profile"
+                className="max-w-28 truncate rounded-lg bg-gray-100 px-3 py-2 text-xs font-semibold text-gray-700 sm:max-w-none sm:text-sm"
+              >
+                {session.user.name || "প্রোফাইল"}
+              </Link>
+
               <button
                 onClick={handleLogout}
-                className="btn btn-sm bg-rose-50 text-rose-600 hover:bg-rose-100 border-none font-semibold text-xs rounded-lg cursor-pointer"
+                className="rounded-lg bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-600 transition hover:bg-rose-100 sm:text-sm"
               >
                 সাইন আউট
               </button>
-            </div>
+            </>
           ) : (
-            <div className="flex items-center gap-2.5">
+            <>
               <Link
                 href="/signin"
-                className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-emerald-700 hover:bg-emerald-50 border border-emerald-600 rounded-lg transition-colors"
+                className="rounded-lg border border-emerald-600 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-50 sm:px-4 sm:text-sm"
               >
                 সাইন ইন
               </Link>
+
               <Link
                 href="/signup"
-                className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-xs transition-colors"
+                className="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 sm:px-4 sm:text-sm"
               >
                 সাইন আপ
               </Link>
-            </div>
+            </>
           )}
         </div>
       </div>
 
-      {/* Category Navigation Bar (Second Row) */}
-      <div className="border-t border-gray-100 bg-white">
-        <div className="max-w-6xl mx-auto px-4 overflow-x-auto no-scrollbar py-2.5 flex items-center justify-center gap-5 sm:gap-7">
+      {/* Category Navigation */}
+      <nav className="border-t border-gray-100 bg-white">
+        <div className="no-scrollbar mx-auto flex max-w-6xl items-center justify-start gap-5 overflow-x-auto px-4 py-3 sm:justify-center sm:gap-7">
           {categories.map((cat) => {
-            const isActive = pathname === `/category/${cat.slug}`;
+            // IMPORTANT: Match the existing plural route folder.
+            const href = `/categories/${cat.slug}`;
+
+            const isActive =
+              pathname === href || pathname.startsWith(`${href}/`);
+
             return (
               <Link
                 key={cat.slug}
-                href={`/category/${cat.slug}`}
-                className={`flex items-center gap-1.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-150 ${
+                href={href}
+                aria-current={isActive ? "page" : undefined}
+                className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap border-b-2 pb-1 text-xs font-semibold transition-colors sm:text-sm ${
                   isActive
-                    ? "text-emerald-700 font-bold"
-                    : "text-gray-700 hover:text-emerald-600"
+                    ? "border-emerald-600 text-emerald-700"
+                    : "border-transparent text-gray-600 hover:text-emerald-600"
                 }`}
               >
-                <span className="text-sm">{cat.emoji}</span>
+                <span>{cat.emoji}</span>
                 <span>{cat.name}</span>
               </Link>
             );
           })}
         </div>
-      </div>
+      </nav>
     </header>
   );
 }
