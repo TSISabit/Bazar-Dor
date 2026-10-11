@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
-import { ShoppingCart } from "lucide-react";
+import toast from "react-hot-toast";
 
 const categories = [
   { name: "চাল", slug: "chal", emoji: "🍚" },
@@ -21,8 +21,15 @@ export default function Navbar() {
   const { data: session } = useSession();
 
   const handleLogout = async () => {
-    await signOut();
-    window.location.href = "/";
+    try {
+      await signOut();
+      toast.success("সফলভাবে সাইন আউট হয়েছে!");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 700);
+    } catch {
+      toast.error("সাইন আউট করতে সমস্যা হয়েছে");
+    }
   };
 
   return (
@@ -30,8 +37,8 @@ export default function Navbar() {
       {/* Top Main Navbar */}
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-xs">
-            <img src="./logo-icon.png" alt="Logo" />
+          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-xs overflow-hidden">
+            <img src="/logo-icon.png" alt="Logo" className="w-6 h-6 object-contain" />
           </div>
           <div>
             <span className="text-xl font-extrabold text-gray-900 tracking-tight">
@@ -52,7 +59,7 @@ export default function Navbar() {
               </span>
               <button
                 onClick={handleLogout}
-                className="btn btn-sm bg-rose-50 text-rose-600 hover:bg-rose-100 border-none font-semibold text-xs rounded-lg"
+                className="btn btn-sm bg-rose-50 text-rose-600 hover:bg-rose-100 border-none font-semibold text-xs rounded-lg cursor-pointer"
               >
                 সাইন আউট
               </button>
@@ -87,7 +94,7 @@ export default function Navbar() {
                 href={`/category/${cat.slug}`}
                 className={`flex items-center gap-1.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors duration-150 ${
                   isActive
-                    ? "text-emerald-700"
+                    ? "text-emerald-700 font-bold"
                     : "text-gray-700 hover:text-emerald-600"
                 }`}
               >

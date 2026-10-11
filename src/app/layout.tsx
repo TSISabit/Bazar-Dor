@@ -25,7 +25,7 @@ export default function RootLayout({
         className={`${inter.className} min-h-screen flex flex-col bg-[#f4f7f5] text-gray-800 antialiased`}
         suppressHydrationWarning
       >
-        <Toaster position="top-right" />
+        <Toaster position="top-right" reverseOrder={false} />
         
         {/* Global Fixed Navbar & Category Bar */}
         <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
